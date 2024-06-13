@@ -1,15 +1,36 @@
-# Godot + Steam - P2P Multiplayer
+## Godot + SteamMultiplayerPeer GDExtension Version (for P2P Multiplayer)
 
-This version uses SteamMultiplayerPeer from GodotSteam to enable P2P multiplayer over Steam networks.
+This version uses the SteamMultiplayerPeer GDExtension to enable use of the High Level Networking APIs (like Spawner, Synchronizer, RPCs) for a P2P multiplayer game over Steam networks.
 
-> Tutorial: https://youtu.be/MoRl9kQb6L0
+> Tutorial: https://youtu.be/xugYYCz0VHU
 
-⭐️ *In order for this project to recognize Steam and SteamMultiplayerPeer, you must open it in the pre-compiled Multiplayer Peer build of Godot*:
 
-- https://godotsteam.com/#__tabbed_1_2
+Extension/Addon SteamMultiplayerPeer:  
+- https://github.com/expressobits/steam-multiplayer-peer
 
-*To Export you must use a template supplied in the zip file above: "godotsteam-g422-s159-gs48-mp-templates.zip"*
-- Exporting: https://godotsteam.com/tutorials/exporting_shipping/
+
+Source Demo:  
+- https://github.com/expressobits/steam-multiplayer-peer/tree/demo
+
+
+This extension is built on the SteamNetworkingSockets APIs which is Steam’s lower level socket:
+- https://partner.steamgames.com/doc/api/ISteamNetworkingSockets
+
+The pre-compiled custom Godot build uses SteamNetworkingMessages:
+- https://partner.steamgames.com/doc/api/ISteamNetworkingMessages
+
+
+k_EResultLimitExceeded issue:
+- https://github.com/expressobits/steam-multiplayer-peer/issues/15
+
+
+Opening the pre-compiled build then installing the Extension issue:
+- https://godotsteam.com/tutorials/common_issues/#using-the-module-and-plug-in
+
+
+MacOS issues:
+- https://github.com/expressobits/steam-multiplayer-peer/issues/9
+
 
 ---
 
