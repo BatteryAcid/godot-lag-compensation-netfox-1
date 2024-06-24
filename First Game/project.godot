@@ -20,11 +20,20 @@ config/icon="res://icon.svg"
 Music="*res://scenes/music.tscn"
 MultiplayerManager="*res://scripts/multiplayer/multiplayer_manager.gd"
 SteamManager="*res://scripts/multiplayer/steam/steam_manager.gd"
+NetworkTime="*res://addons/netfox/network-time.gd"
+NetworkTimeSynchronizer="*res://addons/netfox/network-time-synchronizer.gd"
+NetworkRollback="*res://addons/netfox/rollback/network-rollback.gd"
+NetworkEvents="*res://addons/netfox/network-events.gd"
+NetworkPerformance="*res://addons/netfox/network-performance.gd"
 
 [display]
 
 window/size/always_on_top=true
 window/vsync/vsync_mode=0
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/netfox.internals/plugin.cfg", "res://addons/netfox/plugin.cfg")
 
 [input]
 

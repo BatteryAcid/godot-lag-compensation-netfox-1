@@ -1,49 +1,34 @@
-## Godot + SteamMultiplayerPeer GDExtension Version (for P2P Multiplayer)
+# Godot Lag Compensation: Netfox
 
-This version uses the SteamMultiplayerPeer GDExtension to enable use of the High Level Networking APIs (like Spawner, Synchronizer, RPCs) for a P2P multiplayer game over Steam networks.
+This is a continuation of the Brackeys-based multiplayer game where we add support for lag compensation using Netfox. Netfox uses Client-side Prediction and Server reconciliation as a means to provide responsive client movement while maintaining server authority over the player. 
 
-> Tutorial: https://youtu.be/xugYYCz0VHU
+So you no longer have to wait for that "round trip" from hitting a key and waiting for it to come back from the server before moving the player.
 
+> Tutorial: https://youtu.be/GqHTNmRspjU
 
-Extension/Addon SteamMultiplayerPeer:  
-- https://github.com/expressobits/steam-multiplayer-peer
+---
 
+## Netfox
 
-Source Demo:  
-- https://github.com/expressobits/steam-multiplayer-peer/tree/demo
+Documentation: 
+> https://foxssake.github.io/netfox/
 
+Discord:
+> https://discord.gg/yEFAZKhB
 
-This extension is built on the SteamNetworkingSockets APIs which is Steam’s lower level socket:
-- https://partner.steamgames.com/doc/api/ISteamNetworkingSockets
-
-The pre-compiled custom Godot build uses SteamNetworkingMessages:
-- https://partner.steamgames.com/doc/api/ISteamNetworkingMessages
-
-
-k_EResultLimitExceeded issue:
-- https://github.com/expressobits/steam-multiplayer-peer/issues/15
-
-
-Opening the pre-compiled build then installing the Extension issue:
-- https://godotsteam.com/tutorials/common_issues/#using-the-module-and-plug-in
-
-
-MacOS issues:
-- https://github.com/expressobits/steam-multiplayer-peer/issues/9
+Discussion:
+> https://github.com/foxssake/netfox/discussions
 
 
 ---
 
-# Basic Multiplayer Version
+### Note: 
+This project was built on top off the project with Steam support using the Steam Multiplayer Peer extension: 
+> https://github.com/BatteryAcid/godot-steam-multiplayer-peer-extension
 
-This is a fork of Brackeys first Godot project with an added basic multiplayer implementation. 
+---
 
-Uses MultiplayerSynchronizer, MultiplayerSpawner, and RPCs to sync player position, animation, and the moving platform in the game.
-
-- See tutorial: https://youtu.be/V4a_J38XdHk
-
-
-# First game in Godot
+## Original Source: First game in Godot
 Project files for our video on making your first game in Godot.
 
 Check out the videos on the [Brackeys YouTube Channel](http://youtube.com/brackeys).

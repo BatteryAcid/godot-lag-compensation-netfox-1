@@ -4,30 +4,33 @@ const SPEED = 130.0
 const JUMP_VELOCITY = -300.0
 
 @onready var animated_sprite = $AnimatedSprite2D
+@onready var rollback_synchronizer = $RollbackSynchronizer
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
-var direction = 1
-var do_jump = false
-var _is_on_floor = true
+var _respawning = false
 var alive = true
 
-@onready var username_label = $Username
-var username = ""
+@export var input: PlayerInput
 
 @export var player_id := 1:
 	set(id):
 		player_id = id
-		%InputSynchronizer.set_multiplayer_authority(id)
+		input.set_multiplayer_authority(id)
 
-func _ready():
+func _ready():	
 	if multiplayer.get_unique_id() == player_id:
 		$Camera2D.make_current()
 	else:
 		$Camera2D.enabled = false
+	
+	rollback_synchronizer.process_settings()
 
 func _apply_animations(delta):
+	
+	var direction = input.input_direction
+	
 	# Flip the Sprite
 	if direction > 0:
 		animated_sprite.flip_h = false
@@ -35,7 +38,7 @@ func _apply_animations(delta):
 		animated_sprite.flip_h = true
 	
 	# Play animations
-	if _is_on_floor:
+	if is_on_floor():
 		if direction == 0:
 			animated_sprite.play("idle")
 		else:
@@ -43,18 +46,31 @@ func _apply_animations(delta):
 	else:
 		animated_sprite.play("jump")
 
+func _rollback_tick(delta, tick, is_fresh):
+	if not _respawning:
+		_apply_movement_from_input(delta)
+	else:
+		_respawning = false
+		position = MultiplayerManager.respawn_point
+		velocity = Vector2.ZERO
+		$TickInterpolator.teleport()
+		
+		await get_tree().create_timer(0.5).timeout
+		alive = true
+
 func _apply_movement_from_input(delta):
+	
+	_force_update_is_on_floor()
+	
 	# Add the gravity.
 	if not is_on_floor():
 		velocity.y += gravity * delta
-
-	# Handle jump.
-	if do_jump and is_on_floor():
-		velocity.y = JUMP_VELOCITY
-		do_jump = false
-
+	elif input.input_jump > 0:
+		# Handle jump.
+		velocity.y = JUMP_VELOCITY * input.input_jump
+	
 	# Get the input direction: -1, 0, 1
-	direction = %InputSynchronizer.input_direction
+	var direction = input.input_direction
 	
 	# Apply movement
 	if direction:
@@ -62,39 +78,43 @@ func _apply_movement_from_input(delta):
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 
+	velocity *= NetworkTime.physics_factor
 	move_and_slide()
-	
-	username = %InputSynchronizer.username
+	velocity /= NetworkTime.physics_factor
 
-func _physics_process(delta):
-	if multiplayer.is_server():
-		if not alive && is_on_floor():
-			_set_alive()
-		
-		_is_on_floor = is_on_floor()
-		_apply_movement_from_input(delta)
-		
+func _force_update_is_on_floor():
+	var old_velocity = velocity
+	velocity = Vector2.ZERO
+	move_and_slide()
+	velocity = old_velocity
+
+func _process(delta):
 	if not multiplayer.is_server() || MultiplayerManager.host_mode_enabled:
 		_apply_animations(delta)
 		
-		if username_label && username != "":
-			username_label.set_text(username)
-
 func mark_dead():
 	print("Mark player dead!")
-	alive = false
 	$CollisionShape2D.set_deferred("disabled", true)
+	alive = false
 	$RespawnTimer.start()
 
 func _respawn():
 	print("Respawned!")
-	position = MultiplayerManager.respawn_point
 	$CollisionShape2D.set_deferred("disabled", false)
+	_respawning = true
+	
+	
 
-func _set_alive():
-	print("alive again!")
-	alive = true
-	Engine.time_scale = 1.0
+
+
+
+
+
+
+
+
+
+
 
 
 
